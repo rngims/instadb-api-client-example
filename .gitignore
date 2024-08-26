@@ -1,0 +1,15 @@
+/data
+/node_modules/
+/build/
+/lib/
+/dist/
+/docs/
+/downloads/
+
+.DS_Store
+coverage
+*.log
+out.txt
+
+# API keys and secrets
+.env

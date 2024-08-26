@@ -1,0 +1,26 @@
+{
+  "name": "instadb-api-client-example",
+  "version": "0.0.1",
+  "description": "InstaDB API client example",
+  "type": "module",
+  "main": "app.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "query1": "npm run build && dotenvx run -- node ./dist/scripts/query1.js",
+    "query2": "npm run build && dotenvx run -- node ./dist/scripts/query2.js",
+    "query3": "npm run build && dotenvx run -- node ./dist/scripts/query3.js",
+    "query4": "npm run build && dotenvx run -- node ./dist/scripts/query4.js",
+    "type-check": "tsc --noEmit",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "IMS Inquiry Management Systems Inc.",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.5.0",
+    "prettier": "3.3.3",
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "@dotenvx/dotenvx": "^1.9.1"
+  }
+}

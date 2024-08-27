@@ -5,7 +5,7 @@ Sample client code in TypeScript / Javascript for the InstaDB API.
 
 # installing 
 
-The example was coded with [https://nodejs.org/en](NodeJS) v20.
+The example was coded with [NodeJS](https://nodejs.org/en) v20.
 
 ```
 git clone https://github.com/rngims/instadb-api-client-example.git

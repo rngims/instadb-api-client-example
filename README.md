@@ -5,7 +5,7 @@ Sample client code in TypeScript / Javascript for the InstaDB API.
 
 # installing 
 
-The example was coded with NodeJS v20.
+The example was coded with [https://nodejs.org/en](NodeJS) v20.
 
 ```
 git clone https://github.com/rngims/instadb-api-client-example.git
@@ -20,15 +20,17 @@ as supplied by IMS.
 
 # .env file /  environment variables
 
-## HOST_API
+After onboarding, your API url and access token will be provided to you. 
+
+### HOST_API
 
 InstaDB API url
 
-## API_ACCESS_JWT
+### API_ACCESS_JWT
 
 InstaDB access token
 
-## DOWNLOAD_DIR
+### DOWNLOAD_DIR
 
 Where the CSV file gets saved locally. 
 

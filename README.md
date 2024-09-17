@@ -82,12 +82,17 @@ API call examples are in ./src/scripts/*.ts
 You may modify the query SQL as desired. 
 
 Note that the TypeScript .ts files get compiled to Javascript and then run. 
-
+`npm run build`
 `npm run query1`
 
 returns results in JSON for further use. 
 
+JSON results are limited to 1000 records. 
+
+`npm run build`
 `npm run query1 csv`
 
 generates a CSV file on the server then downloads locally for use. 
+
+Currently the record maximum is 100K records per CSV file. 
 

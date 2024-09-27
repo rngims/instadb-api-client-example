@@ -1,8 +1,10 @@
+import csvParser from "csv-parser";
 import { FetchDataAndCreateCsvAsyncResponse } from "./models/FetchDataAndCreateCsvAsyncResponse.js";
 import { FetchIndexDataRequest } from "./models/FetchIndexDataRequest.js";
 import { FetchIndexDataResponse } from "./models/FetchIndexDataResponse.js";
 import { TabularResult } from "./models/TabularResult.js";
-import { writeFile, existsSync, mkdirSync } from 'node:fs';
+import { existsSync, mkdirSync, createReadStream } from 'node:fs';
+import { writeFile } from 'node:fs/promises';
 
 export async function fetchIndexData(input: FetchIndexDataRequest) {
 	const HOST_API = process.env.HOST_API || '';
@@ -127,6 +129,11 @@ export async function downloadFile(endpoint: string) {
 	const matches = contentdisposition?.match(cdfn_regex);
 	const filename = matches?.[2] || 'unknown.csv';
 
+	const returnVal = {
+		success: false,
+		download_path: '',
+	}
+
 	if(filename && buf) {
 		if(!existsSync(DOWNLOAD_DIR)) {
 			console.log(`mkdir '${DOWNLOAD_DIR}'`);
@@ -134,11 +141,17 @@ export async function downloadFile(endpoint: string) {
 		}
 
 		const dl_path = `${DOWNLOAD_DIR}/${filename}`;
-		writeFile(dl_path, buffer, (err) => {
-			if (err) throw err;
+		try {
+			await writeFile(dl_path, buffer);
+			returnVal.success = true;
+			returnVal.download_path = dl_path;
 			console.log(`file '${dl_path}' saved.`);
-		});
+		}
+		catch(err) {
+			console.log('error: ', err);
+		}
 	}
+	return returnVal;
 }
 
 function convertApiResultToObjectArray(responseJson: string, createId: boolean) {
@@ -164,3 +177,34 @@ function convertApiResultToObjectArray(responseJson: string, createId: boolean) 
 	return dataRows || [];
 };
 
+export async function csvToRecordCallback(csvFilepath: string, recordCallback: Function) {
+	// console.log(`csvToRecordCallback(${csvFilepath}), recordCallback`);
+	let i = 0;
+	
+	return new Promise(function(resolve,reject) {
+		createReadStream(csvFilepath)
+		.pipe(csvParser())
+		.on("data", (data) => {
+			i++;
+			recordCallback(data, i);
+		})
+		.on("end", () => {
+			console.log(`csv processing complete '${csvFilepath}'`);
+			resolve({ records: i });
+		})
+		.on('error', reject);
+	});
+}
+
+export async function csvToObjectArray(csvFilepath: string) {
+	// console.log(`csvToObjectArray(${csvFilepath})`);
+	let records: Array<{[key: string]: string}> = [];
+	const recordCallback = (item: {[key: string]: string}, idx: number) => {
+		// console.log(`recordCallback(item, ${idx})`);
+		records.push(item);
+		// console.log(item);
+	};
+	const rv = await csvToRecordCallback(csvFilepath, recordCallback);
+	// console.log('rv: ', rv);
+	return records;
+}

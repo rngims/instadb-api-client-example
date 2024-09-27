@@ -1,8 +1,13 @@
-import { downloadFile, fetchDataAndCreateCsvAsync, fetchIndexData } from "../lib/apiclient.js";
+import { csvToObjectArray, downloadFile, fetchDataAndCreateCsvAsync, fetchIndexData } from "../lib/apiclient.js";
 
 // npm run queryx csv
-const csv = process.argv[2] === 'csv' ? true : false;
-console.log('csv: ', csv);
+let csv = process.argv[2] === 'csv' ? true : false;
+let csvtojson = process.argv[2] === 'csvtojson' ? true : false;
+if( csvtojson ) {
+	csv = true;
+}
+// console.log('csv: ', csv);
+// console.log('csvtojson: ', csvtojson);
 
 let query = `select * from universal_person where (personal_state in ('hi') and personal_emails_validation_status in ('valid (catch-all)') and homeowner in ('y') and children in ('y'))`;
 
@@ -16,9 +21,17 @@ if( csv ) {
 
 	// fetch csv
 	if(results.files  && results.files?.length > 0) {
-		results.files.forEach((val, idx) => {
+		results.files.forEach(async (val, idx) => {
 			const dlfile_endpoint = val;
-			downloadFile(dlfile_endpoint);
+			const dl_result = await downloadFile(dlfile_endpoint);
+			console.log(`dl_result: `, dl_result);
+
+			if(csvtojson && dl_result.success) {
+				const records = await csvToObjectArray(dl_result.download_path);
+				console.log(`'${dl_result.download_path}' parsed to ${records.length} object array records.`);
+
+				// console.log(records);
+			}
 		});
 	}
 	else {

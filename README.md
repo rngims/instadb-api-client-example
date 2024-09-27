@@ -8,7 +8,7 @@ Sample client code in TypeScript / Javascript for the InstaDB API.
 The example was coded with [NodeJS](https://nodejs.org/en) v20.
 
 ```
-git clone https://github.com/rngims/instadb-api-client-example.git
+git clone https://github.com/IMS-Inquiry-Management-Systems/instadb-api-client-example.git
 cd ./instadb-api-client-example
 npm install
 ```

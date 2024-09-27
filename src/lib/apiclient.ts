@@ -43,6 +43,11 @@ export async function fetchIndexData(input: FetchIndexDataRequest) {
 	const data = await response.json() as FetchIndexDataResponse;
 	console.log('data.recordcount: ', data.recordcount);
 
+	if(data.recordcount === -1) {
+		console.log('unexpected:');
+		console.log(data);
+		return;
+	}
 	if(data.recordcount === 0) {
 		console.log('no results');
 		return;

@@ -40,6 +40,11 @@ export async function fetchIndexData(input: FetchIndexDataRequest) {
 	console.log('response.status: ', response.status);
 	console.log('response.statusText: ', response.statusText);
 
+	if(response.status >= 400 && response.status <= 599) {
+		console.log('[skip parsing]');
+		return;
+	} 
+
 	const data = await response.json() as FetchIndexDataResponse;
 	console.log('data.recordcount: ', data.recordcount);
 

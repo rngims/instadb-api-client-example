@@ -5,6 +5,7 @@ import { FetchIndexDataResponse } from "./models/FetchIndexDataResponse.js";
 import { TabularResult } from "./models/TabularResult.js";
 import { existsSync, mkdirSync, createReadStream } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
+import { IndexDetailsSimple } from "./models/IndexDetailsSimple.js";
 
 export async function fetchIndexData(input: FetchIndexDataRequest) {
 	const HOST_API = process.env.HOST_API || '';
@@ -218,3 +219,45 @@ export async function csvToObjectArray(csvFilepath: string) {
 	// console.log('rv: ', rv);
 	return records;
 }
+
+/**
+ * Returns indexes the user has permission to view/access. 
+ */
+export async function getIndexDetails() {
+	const HOST_API = process.env.HOST_API || '';
+	const API_ACCESS_JWT = process.env.API_ACCESS_JWT || '';
+
+	if(!HOST_API) {
+		throw Error('missing HOST_API');
+	}
+	if(!API_ACCESS_JWT) {
+		throw Error('missing API_ACCESS_JWT');
+	}
+
+	const endpoint = `${HOST_API}/GetIndexDetails`;
+	console.log('endpoint: ', endpoint);
+
+	const response = await fetch(endpoint, {
+		method: 'get',
+		headers: {
+			'Accept': 'application/json',
+			'Authorization': `Bearer ${API_ACCESS_JWT}`,
+		}
+	})
+
+	console.log('response.status: ', response.status);
+	console.log('response.statusText: ', response.statusText);
+
+	const indexDetails = await response.json();
+	// const indexDetailsSimple = indexDetails.map((x: IndexDetailsSimple) => {
+	// 	return { 
+	// 		indexName: x.indexName,
+	// 		alias: x.alias,
+	// 		friendlyName: x.friendlyName,
+	// 		tableGroup: x.tableGroup,
+	// 	};
+	// });
+	console.log('indexDetails: ', indexDetails);
+
+}
+

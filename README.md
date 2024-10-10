@@ -104,3 +104,8 @@ npm run query1 csvtojson
 ```
 generates a CSV file on the server, downloads locally, then parses the CSV into a JS object for processing in the script. 
 
+```
+npm run getindexdetails
+```
+Returns indexes (and columns) the account has permission to view/access. 
+

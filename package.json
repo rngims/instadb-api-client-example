@@ -10,6 +10,7 @@
     "query2": "dotenvx run -- node ./dist/scripts/query2.js",
     "query3": "dotenvx run -- node ./dist/scripts/query3.js",
     "query4": "dotenvx run -- node ./dist/scripts/query4.js",
+    "getindexdetails": "dotenvx run -- node ./dist/scripts/getindexdetails.js",
     "type-check": "tsc --noEmit",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
